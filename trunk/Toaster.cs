@@ -66,29 +66,37 @@ namespace Toaster
             return ToasterType.TOASTER_NONE;
         }
 
-        public bool Register(ToasterNotificationType[] notifications)
+        public bool Register(Bread[] notifications)
         {
             if (!this.IsToasterWorking()) return false;
             this.registered = true;
+
             switch (this.WhichToaster())
             {
                 case ToasterType.TOASTER_SNARL:
                     M_RESULT res = SnarlConnector.RegisterConfig(IntPtr.Zero, this.appName, 0);
 
-                    foreach (ToasterNotificationType notification in notifications)
+                    foreach (Bread notification in notifications)
                     {
                         SnarlConnector.RegisterAlert(this.appName, notification.ToString());
                     }
-                    return res == M_RESULT.M_OK;
+                    this.registered = (res == M_RESULT.M_OK);
+                    break;
                 case ToasterType.TOASTER_GROWL:
-                    growlConnector.Register(new Growl.Connector.Application(this.appName), (NotificationType[])notifications);
-                    return true;
+                    Growl.Connector.NotificationType[] types = new NotificationType[notifications.Length];
+                    for (int i = 0; i < notifications.Length; i++)
+                    {
+                        types[i] = notifications[i].ToGrowlNotificationType();
+                    }
+                    growlConnector.Register(new Growl.Connector.Application(this.appName), types);
+                    break;
                 case ToasterType.TOASTER_CUSTOM:
-                    return true;
+                    break;
                 default:
                     this.registered = false;
-                    return false;
+                    break;
             }
+            return this.registered;
         }
 
         public long Toast(string title, string text, string type)
@@ -106,22 +114,34 @@ namespace Toaster
                     return id;
                 case ToasterType.TOASTER_CUSTOM:
                     bool hasMutex = ToastMutex.WaitOne(new TimeSpan(0, 0, 60));
-                    new Form1(title, text, (System.Drawing.Image)icon).Show();
+                    ToastForm toast = new ToastForm(title, text, (System.Drawing.Image)icon);
+                    toast.Show();
                     if (hasMutex)
                         ToastMutex.ReleaseMutex();
-                    return 0;
+                    return (long)toast.Handle;
                 default:
                     return 0;
             }
         }
     }
 
-    public class ToasterNotificationType : NotificationType
+    public class Bread
     {
-        public ToasterNotificationType(string name) : base(name) { }
+        string name;
+        public string Name { get { return name; } }
+        public Bread(string name)
+        {
+            this.name = name;
+        }
+
         public override string ToString()
         {
             return this.Name;
+        }
+
+        protected internal Growl.Connector.NotificationType ToGrowlNotificationType()
+        {
+            return new Growl.Connector.NotificationType(this.Name);
         }
     }
 }
