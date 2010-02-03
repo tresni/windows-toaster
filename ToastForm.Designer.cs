@@ -1,6 +1,6 @@
 ﻿namespace Toaster
 {
-    partial class Form1
+    partial class ToastForm
     {
         /// <summary>
         /// Required designer variable.
