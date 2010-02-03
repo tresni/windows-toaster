@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Toaster
 {
-    partial class Form1 : Form
+    partial class ToastForm : Form
     {
         Timer TimeToLive = new Timer();
 
@@ -21,7 +21,7 @@ namespace Toaster
             }
         }
 
-        public Form1(string title, string text, Image icon)
+        public ToastForm(string title, string text, Image icon)
         {
             InitializeComponent();
             lblText.Text = text;
