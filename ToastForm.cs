@@ -26,7 +26,14 @@ namespace Toaster
             InitializeComponent();
             lblText.Text = text;
             lblTitle.Text = title;
-            pctIcon.Image = icon;
+            pctIcon.Image = new Bitmap(pctIcon.ClientSize.Width, pctIcon.ClientSize.Height);
+            Graphics graphic = Graphics.FromImage(pctIcon.Image);
+            
+            graphic.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+
+            graphic.DrawImage(icon, new Rectangle(new Point(0,0), pctIcon.Size));
 
             this.Location = new Point(Screen.PrimaryScreen.WorkingArea.Right - this.Width, Screen.PrimaryScreen.WorkingArea.Bottom - this.Height);
         }
