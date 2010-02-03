@@ -1,5 +1,5 @@
+#summary A very basic guide to adding Toast to your .Net application
 #labels Featured,Phase-Implementation
-A very basic guide to adding Toast to your .Net application
 
 = Do I want a new toaster? =
 
