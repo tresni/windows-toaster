@@ -98,7 +98,12 @@ namespace Toaster
             return this.registered;
         }
 
-        public long Toast(string title, string text, string type)
+        public long Toast(Bread type, string title, string text)
+        {
+            return Toast(type.ToString(), title, text);
+        }
+
+        public long Toast(string type, string title, string text)
         {
             if (!this.IsToasterWorking() || !this.registered) return 0;
             long id;
