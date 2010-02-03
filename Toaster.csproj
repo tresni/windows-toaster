@@ -74,6 +74,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files\Microsoft\ILMerge\ILMerge.exe" /out:Toaster.dll /ndebug /internalize Toaster.dll SnarlConnector.dll Growl.Connector.dll Growl.CoreLibrary.dll</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName)==Release"C:\Program Files\Microsoft\ILMerge\ILMerge.exe" /out:Toaster.dll /ndebug /internalize Toaster.dll SnarlConnector.dll Growl.Connector.dll Growl.CoreLibrary.dll
+if $(ConfigurationName)==Release del SnarlConnector.dll Growl.Connector.dll Growl.CoreLibrary.dll</PostBuildEvent>
   </PropertyGroup>
 </Project>
