@@ -17,6 +17,23 @@ namespace Toaster
 
         string appName = "";
         bool registered = false;
+        ToastDoneness duration = ToastDoneness.TOAST_MEDIUM;
+
+        public enum ToastDoneness
+        {
+            TOAST_LIGHT = 3000,
+            TOAST_MEDIUM = 5000,
+            TOAST_DARK = 7000,
+            TOAST_BURNT = 0
+        }
+
+        public ToastDoneness Doneness
+        {
+            set {
+                duration = value;
+            }
+            get { return duration; }
+        }
         public bool Registered { get { return registered; } }
         public bool UseCustom = true;
 
@@ -114,11 +131,11 @@ namespace Toaster
                     growlConnector.Notify(new Notification(this.appName, type, id.ToString(), title, text));
                     return id;
                 case ToasterType.TOASTER_SNARL:
-                    id = SnarlConnector.ShowMessageEx(type, title, text, 0, "", IntPtr.Zero, 0, "");
+                    id = SnarlConnector.ShowMessageEx(type, title, text, (int)this.Doneness, "", IntPtr.Zero, 0, "");
                     return id;
                 case ToasterType.TOASTER_CUSTOM:
                     bool hasMutex = ToastMutex.WaitOne(new TimeSpan(0, 0, 60));
-                    ToastForm toast = new ToastForm(title, text, (System.Drawing.Image)icon);
+                    ToastForm toast = new ToastForm(title, text, (System.Drawing.Image)icon, this.Doneness);
                     toast.Show();
                     if (hasMutex)
                         ToastMutex.ReleaseMutex();

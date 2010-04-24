@@ -5,12 +5,14 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Toaster;
 
 namespace Toaster
 {
     partial class ToastForm : Form
     {
         Timer TimeToLive = new Timer();
+        Toaster.ToastDoneness Duration;
 
         protected override bool ShowWithoutActivation
         {
@@ -20,7 +22,7 @@ namespace Toaster
             }
         }
 
-        public ToastForm(string title, string text, Image icon)
+        public ToastForm(string title, string text, Image icon, Toaster.ToastDoneness duration)
         {
             InitializeComponent();
             lblText.Text = text;
@@ -32,17 +34,23 @@ namespace Toaster
             graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
-            graphic.DrawImage(icon, new Rectangle(new Point(0,0), pctIcon.Size));
+            if (icon != null)
+                graphic.DrawImage(icon, new Rectangle(new Point(0,0), pctIcon.Size));
 
             this.Location = new Point(Screen.PrimaryScreen.WorkingArea.Right - this.Width, Screen.PrimaryScreen.WorkingArea.Bottom - this.Height);
+            this.Duration = duration;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            TimeToLive.Interval = 9000;
             TimeToLive.Tag = false;
-            TimeToLive.Tick += new EventHandler(TimeToLive_Tick);
-            TimeToLive.Start();
+            // Burnt is dismiss on click
+            if (this.Duration != Toaster.ToastDoneness.TOAST_BURNT)
+            {
+                TimeToLive.Interval = (int)this.Duration;
+                TimeToLive.Tick += new EventHandler(TimeToLive_Tick);
+                TimeToLive.Start();
+            }
         }
 
         void TimeToLive_Tick(object sender, EventArgs e)
@@ -74,13 +82,20 @@ namespace Toaster
 
         private void Form1_MouseEnter(object sender, EventArgs e)
         {
-            this.Opacity = 1.00;
-            SetupFadeOut(this.TimeToLive);
+            // If we aren't timing to start with, don't start the timer
+            // also, make don't start fadeout unless we've ended the timer
+            if (TimeToLive.Enabled == true && (bool)TimeToLive.Tag == true)
+            {
+                this.Opacity = 1.00;
+                SetupFadeOut(this.TimeToLive);
+            }
         }
 
         private void Form1_MouseLeave(object sender, EventArgs e)
         {
-            TimeToLive.Start();
+            // If we aren't setup for FadeOut, don't start the timer
+            if ((bool)TimeToLive.Tag == true)
+                TimeToLive.Start();
         }
 
         private void SetupFadeOut(Timer t)
@@ -89,6 +104,7 @@ namespace Toaster
             t.Interval = 1;
             t.Tick -= new EventHandler(TimeToLive_Tick);
 
+            // Are we in the FadeOut already?
             if ((bool)t.Tag == false)
             {
                 t.Tick += new EventHandler(TimeToLive_FadeOut);
