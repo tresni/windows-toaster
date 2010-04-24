@@ -38,7 +38,7 @@
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblTitle.Location = new System.Drawing.Point(81, 0);
+            this.lblTitle.Location = new System.Drawing.Point(105, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(27, 13);
             this.lblTitle.TabIndex = 0;
@@ -73,7 +73,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(108, 78);
+            this.ClientSize = new System.Drawing.Size(132, 102);
             this.ControlBox = false;
             this.Controls.Add(this.pctIcon);
             this.Controls.Add(this.lblText);
