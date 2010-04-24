@@ -11,8 +11,9 @@ namespace Toaster
 {
     partial class ToastForm : Form
     {
+        System.Threading.Mutex ToastMutex;
         Timer TimeToLive = new Timer();
-        Toaster.ToastDoneness Duration;
+        ToastDoneness Duration;
 
         protected override bool ShowWithoutActivation
         {
@@ -22,7 +23,7 @@ namespace Toaster
             }
         }
 
-        public ToastForm(string title, string text, Image icon, Toaster.ToastDoneness duration)
+        public ToastForm(string title, string text, Image icon, ToastDoneness duration)
         {
             InitializeComponent();
             lblText.Text = text;
@@ -39,13 +40,17 @@ namespace Toaster
 
             this.Location = new Point(Screen.PrimaryScreen.WorkingArea.Right - this.Width, Screen.PrimaryScreen.WorkingArea.Bottom - this.Height);
             this.Duration = duration;
+            this.Visible = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            ToastMutex = new System.Threading.Mutex(false, "CustomMutex");
+            ToastMutex.WaitOne(60000, false);
+
             TimeToLive.Tag = false;
             // Burnt is dismiss on click
-            if (this.Duration != Toaster.ToastDoneness.TOAST_BURNT)
+            if (this.Duration != ToastDoneness.TOAST_BURNT)
             {
                 TimeToLive.Interval = (int)this.Duration;
                 TimeToLive.Tick += new EventHandler(TimeToLive_Tick);
@@ -110,6 +115,11 @@ namespace Toaster
                 t.Tick += new EventHandler(TimeToLive_FadeOut);
                 t.Tag = true;
             }
+        }
+
+        private void ToastForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            ToastMutex.ReleaseMutex();
         }
     }
 }

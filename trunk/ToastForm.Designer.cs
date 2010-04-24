@@ -38,7 +38,7 @@
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblTitle.Location = new System.Drawing.Point(109, 0);
+            this.lblTitle.Location = new System.Drawing.Point(81, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(27, 13);
             this.lblTitle.TabIndex = 0;
@@ -69,11 +69,11 @@
             this.pctIcon.Click += new System.EventHandler(this.ClickToClose);
             this.pctIcon.MouseEnter += new System.EventHandler(this.Form1_MouseEnter);
             // 
-            // Form1
+            // ToastForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(136, 106);
+            this.ClientSize = new System.Drawing.Size(108, 78);
             this.ControlBox = false;
             this.Controls.Add(this.pctIcon);
             this.Controls.Add(this.lblText);
@@ -81,13 +81,14 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form1";
+            this.Name = "ToastForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseEnter += new System.EventHandler(this.Form1_MouseEnter);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ToastForm_FormClosed);
             this.Click += new System.EventHandler(this.ClickToClose);
             this.MouseLeave += new System.EventHandler(this.Form1_MouseLeave);
             ((System.ComponentModel.ISupportInitialize)(this.pctIcon)).EndInit();
