@@ -130,8 +130,11 @@ namespace Toaster
 
         long Toast(Bread type, string title, string text, ToasterIcon icon)
         {
-            if (!this.IsToasterWorking() || !this.registered) return 0;
             long id;
+
+            if (!this.IsToasterWorking() || !this.registered) return 0;
+            if (icon == null) icon = new ToasterIcon();
+
             switch (this.WhichToaster())
             {
                 case ToasterType.TOASTER_GROWL:
@@ -229,6 +232,8 @@ namespace Toaster
         {
             this.Icon = icon;
         }
+        public ToasterIcon() { }
+
         ~ToasterIcon()
         {
             if (iconPath != null)
