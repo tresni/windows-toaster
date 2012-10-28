@@ -1,4 +1,4 @@
-﻿using System;
+ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -45,7 +45,7 @@ namespace Toaster
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            ToastMutex = new System.Threading.Mutex(false, "CustomMutex");
+            ToastMutex = new System.Threading.Mutex(false, "Microsoft.Messenger.ToastSemaphore");
             ToastMutex.WaitOne(60000, false);
 
             TimeToLive.Tag = false;
