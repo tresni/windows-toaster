@@ -1,0 +1,3 @@
+Support for [Snarl](http://www.fullphat.net), [Growl for Windows](http://www.growlforwindows.com/), and custom notifications.
+
+The idea of Toaster is to implement Toast notifications using either application if available, and fall back to custom notifications that adhere to the [Coordinating Toast Pop-ups Between Multiple Clients](http://msdn.microsoft.com/en-us/library/ms632289(VS.85).aspx) documentation.
